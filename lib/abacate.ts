@@ -39,6 +39,7 @@ export interface TransparentPix {
 }
 
 // Creates an embedded Pix charge (transparent checkout) for the PRO upgrade.
+// v2 uses a discriminated body: top-level `method` ("PIX"|"BOLETO") + `data`.
 export function createPixCharge(input: {
   amount: number; // centavos
   description: string;
@@ -46,6 +47,7 @@ export function createPixCharge(input: {
   expiresIn?: number; // seconds
 }): Promise<TransparentPix> {
   return call<TransparentPix>("/transparents/create", "POST", {
+    method: "PIX",
     data: {
       amount: input.amount,
       description: input.description,
@@ -61,8 +63,9 @@ export interface CheckStatus {
 }
 
 // Poll a charge status (used as a fallback to the webhook).
+// v2 status endpoint: GET /transparents/check?id=<id>.
 export function getChargeStatus(id: string): Promise<CheckStatus> {
-  return call<CheckStatus>(`/transparents/${id}`, "GET");
+  return call<CheckStatus>(`/transparents/check?id=${encodeURIComponent(id)}`, "GET");
 }
 
 export const isConfigured = () => Boolean(KEY);

@@ -16,13 +16,14 @@ only adds its own `shipsafe-*` indices (auto-created on first boot by
 APP_URL=https://shipsafe.<seu-dominio>
 JWT_SECRET=<openssl rand -hex 32>
 
-# Point at the EXISTING Contabo Elasticsearch (internal service name in EasyPanel,
-# or the VM's private address). Pick ONE auth method.
-ELASTICSEARCH_URL=http://<es-service>:9200
-# ELASTICSEARCH_API_KEY=...           # preferred
+# Existing Contabo Elasticsearch (security is ON — auth required). Pick ONE method.
+ELASTICSEARCH_URL=https://elastic.gob-dev.space
+ELASTICSEARCH_API_KEY=...             # preferred
 # ELASTICSEARCH_USERNAME=elastic
 # ELASTICSEARCH_PASSWORD=...
-# ELASTICSEARCH_INSECURE_TLS=1        # only if self-signed https
+# ELASTICSEARCH_INSECURE_TLS=1        # only if the cert is self-signed
+# Tip: inside EasyPanel you can also use the internal service URL (http://<es>:9200)
+# to avoid egress; the public https URL above works from anywhere.
 
 # AbacatePay (Pix) — leave blank to run in demo mode; set for real charges.
 ABACATEPAY_API_KEY=<sua chave>
