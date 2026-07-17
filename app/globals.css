@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+/* ShipSafe — dark "security console" theme (dark only, committed). */
+@theme {
+  --color-bg: #08090b;
+  --color-bg-elev: #0d0f13;
+  --color-surface: #101216;
+  --color-surface-2: #15181d;
+  --color-border: #1e222a;
+  --color-border-soft: #171a20;
+  --color-ink: #e8eaee;
+  --color-muted: #939aa6;
+  --color-faint: #626977;
+
+  --color-brand: #10b981;
+  --color-brand-soft: #34d399;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-bg);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle radial glow at the top of full-bleed pages. */
+.hero-glow {
+  background:
+    radial-gradient(60% 50% at 50% -10%, rgba(16, 185, 129, 0.14), transparent 70%),
+    radial-gradient(40% 40% at 85% 0%, rgba(16, 185, 129, 0.06), transparent 70%);
+}
+
+.grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(70% 60% at 50% 0%, black, transparent 80%);
+}
+
+::selection {
+  background: rgba(16, 185, 129, 0.28);
+}
+
+/* Slim, dark scrollbars to match the console aesthetic. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2f38 transparent;
+}
+*::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #2a2f38;
+  border-radius: 9999px;
+}
+
+@keyframes ss-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.animate-ss-pulse {
+  animation: ss-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes ss-spin {
+  to { transform: rotate(360deg); }
+}
+.animate-ss-spin {
+  animation: ss-spin 0.7s linear infinite;
+}
