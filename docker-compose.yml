@@ -2,7 +2,7 @@
 # so this compose only needs Elasticsearch locally; `next dev` runs on host.
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.2.3
     container_name: fecho-es
     environment:
       - discovery.type=single-node
