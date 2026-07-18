@@ -26,6 +26,8 @@ export function PostHogProvider({
       person_profiles: "identified_only",
       defaults: "2025-05-24",
     });
+    // Tag every event so SafeShip is filterable inside a shared project.
+    posthog.register({ app: "safeship" });
   }, [apiKey, host]);
 
   if (!apiKey) return <>{children}</>;
