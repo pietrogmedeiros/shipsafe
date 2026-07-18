@@ -3,10 +3,11 @@ FROM node:22-alpine AS deps
 # libc6-compat helps native prebuilt binaries (swc, tailwind oxide) on musl.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json package-lock.json ./
-# Prefer reproducible ci; fall back to install if the lockfile drifts so the
-# build never hard-fails on a lockfile sync mismatch.
-RUN npm ci --no-audit --no-fund || (echo "npm ci failed, falling back to npm install" && npm install --no-audit --no-fund)
+COPY package.json ./
+# The committed lockfile is generated on macOS, so it pins darwin binaries and
+# omits the linux-x64-musl native deps (lightningcss for Tailwind v4, swc).
+# Resolve fresh ON THIS PLATFORM so the correct Alpine/musl binaries install.
+RUN npm install --no-audit --no-fund
 
 # --- build ---
 FROM node:22-alpine AS build
