@@ -12,10 +12,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.APP_URL || "https://safeship.space";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "SafeShip — seu app vibe-coded está vazando?",
   description:
     "Escaneie seu app publicado como um atacante faria: segredos expostos, Supabase sem RLS, .env e .git vazados, headers ausentes. Relatório com nota A–F e correções em português.",
+  openGraph: {
+    title: "SafeShip — seu app vibe-coded está vazando?",
+    description:
+      "Cole a URL do seu app e descubra o que está exposto para a internet antes que um atacante descubra. Nota A–F e correções em português.",
+    url: siteUrl,
+    siteName: "SafeShip",
+    locale: "pt_BR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
