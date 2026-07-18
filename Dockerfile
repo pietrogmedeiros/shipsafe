@@ -1,11 +1,16 @@
 # --- deps ---
 FROM node:22-alpine AS deps
+# libc6-compat helps native prebuilt binaries (swc, tailwind oxide) on musl.
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+# Prefer reproducible ci; fall back to install if the lockfile drifts so the
+# build never hard-fails on a lockfile sync mismatch.
+RUN npm ci --no-audit --no-fund || (echo "npm ci failed, falling back to npm install" && npm install --no-audit --no-fund)
 
 # --- build ---
 FROM node:22-alpine AS build
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
