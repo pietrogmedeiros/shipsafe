@@ -7,6 +7,7 @@ export const IDX = {
   scans: "shipsafe-scans",
   findings: "shipsafe-findings",
   payments: "shipsafe-payments",
+  feedback: "shipsafe-feedback",
 } as const;
 
 const MAPPINGS: Record<string, Record<string, unknown>> = {
@@ -75,6 +76,17 @@ const MAPPINGS: Record<string, Record<string, unknown>> = {
       status: { type: "keyword" },
       createdAt: { type: "date" },
       paidAt: { type: "date" },
+    },
+  },
+  [IDX.feedback]: {
+    properties: {
+      id: { type: "keyword" },
+      userId: { type: "keyword" },
+      userEmail: { type: "keyword" },
+      userName: { type: "text" },
+      type: { type: "keyword" },
+      message: { type: "text" },
+      createdAt: { type: "date" },
     },
   },
 };

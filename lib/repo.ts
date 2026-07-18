@@ -4,6 +4,8 @@ import { IDX, ensureIndices } from "./indices";
 import { hashPassword } from "./auth";
 import type {
   App,
+  Feedback,
+  FeedbackType,
   Finding,
   Grade,
   Payment,
@@ -314,6 +316,33 @@ export async function markPaymentPaid(id: string): Promise<void> {
     doc: { status: "paid", paidAt: now() },
     refresh: "wait_for",
   });
+}
+
+// ---------- Feedback ----------
+export async function createFeedback(input: {
+  userId: string;
+  userEmail: string;
+  userName: string;
+  type: FeedbackType;
+  message: string;
+}): Promise<Feedback> {
+  await ready();
+  const fb: Feedback = {
+    id: nanoid(),
+    userId: input.userId,
+    userEmail: input.userEmail,
+    userName: input.userName,
+    type: input.type,
+    message: input.message.trim(),
+    createdAt: now(),
+  };
+  await es.index({
+    index: IDX.feedback,
+    id: fb.id,
+    document: fb,
+    refresh: "wait_for",
+  });
+  return fb;
 }
 
 // Grant (or extend) 1 year (365 days) of Pro from now.

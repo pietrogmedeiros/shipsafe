@@ -99,3 +99,16 @@ export interface Payment {
   createdAt: string;
   paidAt: string | null;
 }
+
+// User-submitted improvement suggestion or feature request.
+export type FeedbackType = "suggestion" | "feature";
+
+export interface Feedback {
+  id: string;
+  userId: string;
+  userEmail: string;
+  userName: string;
+  type: FeedbackType;
+  message: string;
+  createdAt: string;
+}

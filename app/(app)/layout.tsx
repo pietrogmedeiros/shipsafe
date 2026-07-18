@@ -4,6 +4,7 @@ import { getSession } from "@/lib/auth";
 import { effectivePlan } from "@/lib/plan";
 import { Logo } from "@/components/Logo";
 import { LogoutButton } from "@/components/LogoutButton";
+import { FeedbackWidget } from "@/components/FeedbackWidget";
 
 export default async function AppLayout({
   children,
@@ -21,6 +22,7 @@ export default async function AppLayout({
         <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
           <Logo href="/app" />
           <div className="flex items-center gap-3">
+            <FeedbackWidget />
             <span
               className={`rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${
                 pro
