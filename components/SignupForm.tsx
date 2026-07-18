@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import posthog from "posthog-js";
 
 const inputCls =
   "w-full rounded-lg border border-border bg-surface py-2.5 px-3 text-sm text-ink placeholder:text-faint outline-none transition focus:border-brand/50 focus:ring-2 focus:ring-brand/20";
@@ -39,7 +40,13 @@ export function SignupForm({ presetUrl }: { presetUrl?: string }) {
         return;
       }
 
-      // Account created + session cookie set. Auto-scan if a URL was carried in.
+      // Account created + session cookie set.
+      if (posthog.__loaded) {
+        posthog.identify(email, { email, name });
+        posthog.capture("signup_completed");
+      }
+
+      // Auto-scan if a URL was carried in.
       if (presetUrl) {
         setPhase("scanning");
         try {

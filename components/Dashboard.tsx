@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { App, Scan } from "@/lib/types";
+import posthog from "posthog-js";
 import { GradeBadge } from "./GradeBadge";
 import { BlockyLoaderOverlay } from "./BlockyLoader";
 import { timeAgo } from "./severity";
@@ -88,6 +89,12 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
       }
       const data = await res.json();
       if (data?.scan?.id) {
+        if (posthog.__loaded)
+          posthog.capture("scan_completed", {
+            grade: data.scan.grade,
+            score: data.scan.score,
+            first_scan: true,
+          });
         const wait = minScanMs(data.scan.counts) - (Date.now() - startedAt);
         if (wait > 0) await sleep(wait);
         router.push(`/app/scans/${data.scan.id}`);
@@ -111,6 +118,12 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
       if (res.ok) {
         const data = await res.json();
         if (data?.scan?.id) {
+          if (posthog.__loaded)
+            posthog.capture("scan_completed", {
+              grade: data.scan.grade,
+              score: data.scan.score,
+              first_scan: false,
+            });
           const wait = minScanMs(data.scan.counts) - (Date.now() - startedAt);
           if (wait > 0) await sleep(wait);
           router.push(`/app/scans/${data.scan.id}`);

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import posthog from "posthog-js";
 import { useAuthMascot } from "./AuthMascot";
 
 const inputCls =
@@ -27,6 +28,7 @@ export function LoginForm() {
         body: JSON.stringify({ email, password, rememberMe: remember }),
       });
       if (res.ok) {
+        if (posthog.__loaded) posthog.identify(email, { email });
         router.push("/app");
         router.refresh();
         return;

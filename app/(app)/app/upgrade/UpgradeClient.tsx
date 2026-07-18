@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import posthog from "posthog-js";
 
 interface UpgradeResponse {
   paymentId: string;
@@ -56,6 +57,7 @@ export default function UpgradeClient() {
         const data = (await res.json()) as { status?: string };
         if (data.status === "paid") {
           stopPolling();
+          if (posthog.__loaded) posthog.capture("pro_activated", { via: "pix" });
           setPhase("paid");
           setTimeout(() => {
             window.location.href = "/app";
@@ -88,6 +90,8 @@ export default function UpgradeClient() {
       }
       // alreadyPro, or a 100%-off coupon that granted Pro without Pix.
       if (data.alreadyPro || data.freeUpgrade) {
+        if (data.freeUpgrade && posthog.__loaded)
+          posthog.capture("pro_activated", { via: "coupon" });
         setPhase("paid");
         setTimeout(() => (window.location.href = "/app"), 1500);
         return;
