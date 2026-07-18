@@ -8,6 +8,15 @@ import { GradeBadge } from "./GradeBadge";
 import { BlockyLoaderOverlay } from "./BlockyLoader";
 import { timeAgo } from "./severity";
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Keep the Blocky loader on screen for at least 5s, longer when the scan
+// found more items — so the animation + quips actually get seen.
+function minScanMs(counts?: Record<string, number> | null): number {
+  const total = counts ? Object.values(counts).reduce((a, b) => a + b, 0) : 0;
+  return Math.min(5000 + total * 650, 12000);
+}
+
 export function Dashboard({ isPro }: { isPro: boolean }) {
   const router = useRouter();
   const [apps, setApps] = useState<App[]>([]);
@@ -57,6 +66,7 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
     setSubmitting(true);
     setScanError(null);
     setPlanLimited(false);
+    const startedAt = Date.now();
     try {
       const res = await fetch("/api/scans", {
         method: "POST",
@@ -78,6 +88,8 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
       }
       const data = await res.json();
       if (data?.scan?.id) {
+        const wait = minScanMs(data.scan.counts) - (Date.now() - startedAt);
+        if (wait > 0) await sleep(wait);
         router.push(`/app/scans/${data.scan.id}`);
       }
     } catch {
@@ -89,6 +101,7 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
 
   async function rescan(appId: string) {
     setRescanId(appId);
+    const startedAt = Date.now();
     try {
       const res = await fetch("/api/scans", {
         method: "POST",
@@ -98,6 +111,8 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
       if (res.ok) {
         const data = await res.json();
         if (data?.scan?.id) {
+          const wait = minScanMs(data.scan.counts) - (Date.now() - startedAt);
+          if (wait > 0) await sleep(wait);
           router.push(`/app/scans/${data.scan.id}`);
           return;
         }
