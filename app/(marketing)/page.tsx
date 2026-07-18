@@ -88,6 +88,14 @@ const BLOCKY = [
   },
 ];
 
+function AppleIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
+      <path d="M16.365 1.43c0 1.14-.417 2.2-1.11 2.98-.75.85-1.98 1.5-3.02 1.42-.13-1.1.42-2.26 1.09-3 .74-.82 2.02-1.43 3.04-1.4zM20.7 17.1c-.55 1.27-.82 1.83-1.53 2.95-.99 1.57-2.39 3.53-4.12 3.54-1.54.02-1.94-1.01-4.03-1-2.09.01-2.53 1.02-4.07 1-1.73-.01-3.05-1.78-4.05-3.35C-.85 15.9-.24 9.3 3.6 8.03c1.14-.38 2.34-.02 3.32.28.79.24 1.55.66 2.06.66.5 0 1.4-.5 2.36-.85 1.15-.42 2.62-.63 3.98.16-3.72 2.04-3.1 7.35.38 8.82z" />
+    </svg>
+  );
+}
+
 export default function LandingPage() {
   const year = new Date().getFullYear();
 
@@ -98,6 +106,14 @@ export default function LandingPage() {
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
           <Logo href="/" />
           <div className="flex items-center gap-2">
+            <a
+              href="/download/mac"
+              title="Baixar para Mac"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm text-muted transition hover:border-brand/40 hover:text-ink sm:px-3"
+            >
+              <AppleIcon className="h-4 w-4" />
+              <span className="hidden sm:inline">Baixar para Mac</span>
+            </a>
             <Link
               href="/login"
               className="rounded-md px-3 py-1.5 text-sm text-muted transition hover:text-ink"
