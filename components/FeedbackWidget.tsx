@@ -26,6 +26,22 @@ export function FeedbackWidget() {
     }, 200);
   }
 
+  // While the modal is open: close on ESC and lock background scroll.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   async function submit() {
     if (message.trim().length < 3) {
       setError("Escreve um pouquinho mais 🙂");
