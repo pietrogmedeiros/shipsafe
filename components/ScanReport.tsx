@@ -97,6 +97,18 @@ export function ScanReport({ id, isPro }: { id: string; isPro: boolean }) {
 
   return (
     <div className="flex flex-col gap-8">
+      {!running && !failed && isPro && (
+        <div className="flex justify-end">
+          <a
+            href={`/report/${id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-brand/40 bg-brand/10 px-3.5 py-2 text-sm font-medium text-brand-soft transition hover:bg-brand/20"
+          >
+            ⬇ Exportar PDF
+          </a>
+        </div>
+      )}
       {/* Header / summary */}
       <div
         className={`relative overflow-hidden rounded-2xl border bg-surface p-6 sm:p-8 ${
@@ -216,16 +228,6 @@ export function ScanReport({ id, isPro }: { id: string; isPro: boolean }) {
               <span className="h-1.5 w-1.5 rounded-full bg-brand" />
               Secured by SafeShip
             </div>
-            {isPro && (
-              <a
-                href={`/report/${id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-brand-soft"
-              >
-                Exportar PDF
-              </a>
-            )}
             {!isPro && (
               <p className="text-sm text-muted">
                 <Link
