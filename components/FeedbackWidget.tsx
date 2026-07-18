@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Mascot } from "./Mascot";
 import type { FeedbackType } from "@/lib/types";
 
 export function FeedbackWidget() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<FeedbackType>("suggestion");
   const [message, setMessage] = useState("");
@@ -58,11 +61,13 @@ export function FeedbackWidget() {
         💡 <span>Sugerir</span>
       </button>
 
-      {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-bg/80 p-4 backdrop-blur-sm"
-          onClick={close}
-        >
+      {open &&
+        mounted &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-bg/80 p-4 backdrop-blur-sm"
+            onClick={close}
+          >
           <div
             className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
@@ -153,8 +158,9 @@ export function FeedbackWidget() {
               </>
             )}
           </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </>
   );
 }
