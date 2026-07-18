@@ -8,7 +8,7 @@ export default function AuthLayout({
 }) {
   return (
     <AuthMascotProvider>
-    <div className="min-h-full lg:grid lg:grid-cols-2">
+    <div className="min-h-screen lg:grid lg:grid-cols-2">
       {/* Brand panel with a living Blocky — desktop only */}
       <aside className="relative hidden overflow-hidden border-r border-border bg-surface lg:flex lg:flex-col lg:justify-between lg:p-12">
         <div className="hero-glow pointer-events-none absolute inset-0" />
@@ -32,7 +32,7 @@ export default function AuthLayout({
       </aside>
 
       {/* Form panel */}
-      <main className="relative flex min-h-full items-center justify-center px-4 py-14">
+      <main className="relative flex min-h-screen items-center justify-center px-4 py-14">
         <div className="hero-glow pointer-events-none absolute inset-0 lg:hidden" />
         <div className="relative w-full max-w-sm">
           <div className="mb-8 flex justify-center lg:hidden">
