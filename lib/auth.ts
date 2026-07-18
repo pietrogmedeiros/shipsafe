@@ -19,20 +19,29 @@ export async function verifyPassword(
   return bcrypt.compare(pw, hash);
 }
 
-export async function createSession(user: SessionUser): Promise<void> {
+export async function createSession(
+  user: SessionUser,
+  rememberMe = true,
+): Promise<void> {
   const token = await new SignJWT({ user } as unknown as Record<string, unknown>)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("30d")
     .sign(secret);
   const jar = await cookies();
-  jar.set(COOKIE, token, {
+  const base = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "lax" as const,
     path: "/",
-    maxAge: 60 * 60 * 24 * 30,
-  });
+  };
+  // rememberMe → persistent 30-day cookie; otherwise a session cookie that
+  // clears when the browser closes.
+  jar.set(
+    COOKIE,
+    token,
+    rememberMe ? { ...base, maxAge: 60 * 60 * 24 * 30 } : base,
+  );
 }
 
 export async function destroySession(): Promise<void> {

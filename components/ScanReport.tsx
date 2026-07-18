@@ -202,7 +202,7 @@ export function ScanReport({ id, isPro }: { id: string; isPro: boolean }) {
                   </div>
                   <div className="flex flex-col gap-3">
                     {group.items.map((f) => (
-                      <FindingCard key={f.id} finding={f} />
+                      <FindingCard key={f.id} finding={f} isPro={isPro} />
                     ))}
                   </div>
                 </section>
@@ -216,6 +216,16 @@ export function ScanReport({ id, isPro }: { id: string; isPro: boolean }) {
               <span className="h-1.5 w-1.5 rounded-full bg-brand" />
               Secured by SafeShip
             </div>
+            {isPro && (
+              <a
+                href={`/report/${id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-brand-soft"
+              >
+                Exportar PDF
+              </a>
+            )}
             {!isPro && (
               <p className="text-sm text-muted">
                 <Link
@@ -258,8 +268,35 @@ function CountRow({ counts }: { counts: Record<Severity, number> }) {
   );
 }
 
-function FindingCard({ finding }: { finding: Finding }) {
+// A copy-paste prompt for an AI coding assistant (Claude / Codex / Cursor).
+function buildFixPrompt(f: Finding): string {
+  return `Você é um engenheiro de segurança sênior. Um scanner externo (SafeShip) encontrou esta vulnerabilidade no meu app já publicado:
+
+Vulnerabilidade: ${f.title}
+Severidade: ${SEVERITY_LABEL[f.severity]}
+Categoria: ${CATEGORY_LABEL[f.category] ?? f.category}${f.location ? `\nOnde: ${f.location}` : ""}
+
+O que é:
+${f.detail}
+
+Evidência (já redigida):
+${f.evidence}
+
+Correção recomendada:
+${f.remediation}
+
+Tarefa: implemente essa correção no meu código. Diga exatamente quais arquivos alterar, mostre o diff e explique como eu testo que o vazamento foi fechado. Não introduza regressões nem exponha novos segredos.`;
+}
+
+function FindingCard({
+  finding,
+  isPro,
+}: {
+  finding: Finding;
+  isPro: boolean;
+}) {
   const isCritical = finding.severity === "critical";
+  const [copied, setCopied] = useState(false);
   return (
     <div
       className={`rounded-xl border bg-surface p-4 sm:p-5 ${
@@ -307,6 +344,29 @@ function FindingCard({ finding }: { finding: Finding }) {
           <p className="whitespace-pre-line text-sm leading-relaxed text-amber-100/80">
             {finding.remediation}
           </p>
+          {isPro ? (
+            <button
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(buildFixPrompt(finding));
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 1800);
+                } catch {
+                  /* clipboard blocked */
+                }
+              }}
+              className="mt-3 inline-flex items-center gap-2 rounded-lg border border-brand/40 bg-brand/10 px-3 py-1.5 text-xs font-medium text-brand-soft transition hover:bg-brand/20"
+            >
+              {copied ? "Prompt copiado ✓" : "⌘ Copiar prompt pra IA (Claude/Codex)"}
+            </button>
+          ) : (
+            <Link
+              href="/app/upgrade"
+              className="mt-3 inline-flex items-center gap-1.5 text-xs text-faint transition hover:text-brand-soft"
+            >
+              🔒 Prompt de correção pra IA — recurso Pro
+            </Link>
+          )}
         </div>
       )}
     </div>

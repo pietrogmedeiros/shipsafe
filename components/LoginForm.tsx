@@ -10,6 +10,7 @@ export function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -21,7 +22,7 @@ export function LoginForm() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, rememberMe: remember }),
       });
       if (res.ok) {
         router.push("/app");
@@ -52,11 +53,12 @@ export function LoginForm() {
         <span className="text-xs font-medium text-muted">E-mail</span>
         <input
           type="email"
+          name="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="voce@empresa.com"
-          autoComplete="email"
+          autoComplete="username"
           className={inputCls}
         />
       </label>
@@ -64,6 +66,7 @@ export function LoginForm() {
         <span className="text-xs font-medium text-muted">Senha</span>
         <input
           type="password"
+          name="password"
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -71,6 +74,15 @@ export function LoginForm() {
           autoComplete="current-password"
           className={inputCls}
         />
+      </label>
+      <label className="flex cursor-pointer items-center gap-2 text-sm text-muted select-none">
+        <input
+          type="checkbox"
+          checked={remember}
+          onChange={(e) => setRemember(e.target.checked)}
+          className="h-4 w-4 rounded border-border bg-surface accent-brand"
+        />
+        Lembrar de mim neste dispositivo
       </label>
       <button
         type="submit"

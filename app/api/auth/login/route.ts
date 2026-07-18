@@ -6,6 +6,7 @@ import { createSession, verifyPassword } from "@/lib/auth";
 const schema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
+  rememberMe: z.boolean().optional(),
 });
 
 export async function POST(req: Request) {
@@ -27,12 +28,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "invalid_credentials" }, { status: 401 });
   }
 
-  await createSession({
-    id: user.id,
-    email: user.email,
-    name: user.name,
-    plan: user.plan,
-    planUntil: user.planUntil,
-  });
+  await createSession(
+    {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      plan: user.plan,
+      planUntil: user.planUntil,
+    },
+    parsed.data.rememberMe ?? true,
+  );
   return NextResponse.json({ ok: true });
 }
