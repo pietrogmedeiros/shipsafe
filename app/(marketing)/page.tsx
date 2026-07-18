@@ -419,7 +419,7 @@ export default function LandingPage() {
             <h3 className="text-sm font-medium text-brand-soft">Pro</h3>
             <div className="mt-3 flex items-baseline gap-1.5">
               <span className="text-4xl font-bold tracking-tight text-ink">
-                R$ 29
+                R$ 50
               </span>
               <span className="text-sm text-faint">/ano</span>
             </div>

@@ -140,7 +140,7 @@ export default function UpgradeClient() {
           </ul>
           <div className="mt-8 flex items-baseline gap-2">
             <span className="text-3xl font-semibold text-amber-400">
-              R$29,00
+              R$50,00
             </span>
             <span className="text-sm text-neutral-500">/ ano · via Pix</span>
           </div>
@@ -216,7 +216,7 @@ export default function UpgradeClient() {
               </div>
 
               <p className="mt-4 font-mono text-sm text-neutral-200">
-                {brl(charge.amount ?? 2900)}
+                {brl(charge.amount ?? 5000)}
                 {charge.coupon && (
                   <span className="ml-2 rounded bg-amber-500/15 px-1.5 py-0.5 text-[11px] text-amber-300">
                     {charge.coupon.label}

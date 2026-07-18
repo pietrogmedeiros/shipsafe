@@ -23,7 +23,7 @@ export const PLAN_LIMITS = {
   },
 } as const;
 
-export const PRO_PRICE_CENTS = 2900; // R$ 29,00 / year (anual)
+export const PRO_PRICE_CENTS = 5000; // R$ 50,00 / year (anual)
 
 // A user is effectively pro only while their paid window is valid.
 export function effectivePlan(user: {
