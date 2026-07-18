@@ -3,7 +3,7 @@ import { getSession } from "@/lib/auth";
 import {
   getPayment,
   markPaymentPaid,
-  grantProFor30Days,
+  grantProForOneYear,
 } from "@/lib/repo";
 import { getChargeStatus } from "@/lib/abacate";
 
@@ -31,7 +31,7 @@ export async function GET(req: Request) {
     const age = Date.now() - new Date(payment.createdAt).getTime();
     if (age >= 6000) {
       await markPaymentPaid(payment.id);
-      await grantProFor30Days(payment.userId);
+      await grantProForOneYear(payment.userId);
       return NextResponse.json({ status: "paid" });
     }
     return NextResponse.json({ status: "pending" });
@@ -41,7 +41,7 @@ export async function GET(req: Request) {
   const check = await getChargeStatus(payment.abacateId);
   if (check.status === "PAID") {
     await markPaymentPaid(payment.id);
-    await grantProFor30Days(payment.userId);
+    await grantProForOneYear(payment.userId);
     return NextResponse.json({ status: "paid" });
   }
   return NextResponse.json({ status: "pending" });

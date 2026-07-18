@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { getSession } from "@/lib/auth";
-import { getUser, createPayment } from "@/lib/repo";
+import { getUser, createPayment, grantProForOneYear } from "@/lib/repo";
 import { createPixCharge, isConfigured } from "@/lib/abacate";
 import { PRO_PRICE_CENTS, effectivePlan } from "@/lib/plan";
+import { findCoupon, priceWithCoupon } from "@/lib/coupons";
 
 // A believable Pix "copia e cola" (EMV BR Code) placeholder for the demo
 // path, so the whole upgrade UX is exercisable with no AbacatePay key.
@@ -54,7 +55,7 @@ function demoQrDataUri(): string {
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
 }
 
-export async function POST() {
+export async function POST(req: Request) {
   const session = await getSession();
   if (!session)
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
@@ -66,25 +67,57 @@ export async function POST() {
     return NextResponse.json({ alreadyPro: true });
   }
 
-  // Real mode: create a Pix charge via AbacatePay.
+  // Optional discount coupon.
+  let couponCode: string | undefined;
+  try {
+    const body = (await req.json()) as { coupon?: string };
+    couponCode = body?.coupon;
+  } catch {
+    /* no body → no coupon */
+  }
+  const coupon = findCoupon(couponCode);
+  if (couponCode && couponCode.trim() && !coupon) {
+    return NextResponse.json({ error: "invalid_coupon" }, { status: 400 });
+  }
+  const amount = priceWithCoupon(PRO_PRICE_CENTS, coupon);
+  const couponInfo = coupon
+    ? { code: coupon.code, label: coupon.label }
+    : null;
+
+  // Coupon zeroed the price → grant Pro directly, no Pix needed.
+  if (amount <= 0) {
+    await grantProForOneYear(user.id);
+    return NextResponse.json({ freeUpgrade: true, coupon: couponInfo, amount: 0 });
+  }
+
+  const description = `SafeShip Pro — 1 ano${coupon ? ` (cupom ${coupon.code})` : ""}`;
+
+  // Real mode: create a Pix charge via AbacatePay. Always return JSON — never
+  // let an AbacatePay error bubble into an empty 500 body (the client does
+  // res.json() and would throw "Unexpected end of JSON input").
   if (isConfigured()) {
-    const charge = await createPixCharge({
-      amount: PRO_PRICE_CENTS,
-      description: "SafeShip Pro — 1 mês",
-      customer: { name: user.name, email: user.email },
-      expiresIn: 3600,
-    });
-    const payment = await createPayment({
-      userId: user.id,
-      abacateId: charge.id,
-      amount: PRO_PRICE_CENTS,
-    });
-    return NextResponse.json({
-      paymentId: payment.id,
-      brCode: charge.brCode,
-      brCodeBase64: charge.brCodeBase64,
-      demo: false,
-    });
+    try {
+      const charge = await createPixCharge({ amount, description, expiresIn: 3600 });
+      const payment = await createPayment({
+        userId: user.id,
+        abacateId: charge.id,
+        amount,
+      });
+      return NextResponse.json({
+        paymentId: payment.id,
+        brCode: charge.brCode,
+        brCodeBase64: charge.brCodeBase64,
+        demo: false,
+        amount,
+        coupon: couponInfo,
+      });
+    } catch (e) {
+      const detail = e instanceof Error ? e.message : String(e);
+      return NextResponse.json(
+        { error: "Não foi possível gerar o Pix. Tente novamente.", detail },
+        { status: 502 },
+      );
+    }
   }
 
   // Demo fallback: synthesize a charge so the flow works with no key.
@@ -92,12 +125,14 @@ export async function POST() {
   const payment = await createPayment({
     userId: user.id,
     abacateId,
-    amount: PRO_PRICE_CENTS,
+    amount,
   });
   return NextResponse.json({
     paymentId: payment.id,
     brCode: DEMO_BRCODE,
     brCodeBase64: demoQrDataUri(),
     demo: true,
+    amount,
+    coupon: couponInfo,
   });
 }

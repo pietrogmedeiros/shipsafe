@@ -3,7 +3,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import {
   findPaymentByAbacateId,
   markPaymentPaid,
-  grantProFor30Days,
+  grantProForOneYear,
 } from "@/lib/repo";
 
 // Production confirm path: AbacatePay → us. Verified two ways (either passes):
@@ -95,7 +95,7 @@ export async function POST(req: Request) {
     // Idempotent: only act on the first paid transition.
     if (payment && payment.status !== "paid") {
       await markPaymentPaid(payment.id);
-      await grantProFor30Days(payment.userId);
+      await grantProForOneYear(payment.userId);
     }
   }
 

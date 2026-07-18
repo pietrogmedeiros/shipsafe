@@ -16,7 +16,7 @@ Nota final **A–F**.
 
 ## Planos
 - **Grátis:** 1 app, scan sob demanda, relatório completo.
-- **Pro (R$ 29/mês):** até 25 apps, monitoramento contínuo + alerta a cada
+- **Pro (R$ 29/ano):** até 25 apps, monitoramento contínuo + alerta a cada
   deploy, PDF e selo "Secured by SafeShip". Pagamento via **Pix (AbacatePay)**.
 
 ## Stack

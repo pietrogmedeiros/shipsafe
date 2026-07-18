@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { App, Scan } from "@/lib/types";
 import { GradeBadge } from "./GradeBadge";
+import { BlockyLoaderOverlay } from "./BlockyLoader";
 import { timeAgo } from "./severity";
 
 export function Dashboard({ isPro }: { isPro: boolean }) {
@@ -110,6 +111,11 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
 
   return (
     <div className="flex flex-col gap-10">
+      {(submitting || rescanId) && (
+        <BlockyLoaderOverlay
+          label={rescanId ? "Re-escaneando…" : "Escaneando seu app…"}
+        />
+      )}
       {/* New scan */}
       <section>
         <h2 className="text-sm font-medium text-muted">Escanear um app</h2>

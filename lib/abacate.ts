@@ -40,20 +40,26 @@ export interface TransparentPix {
 
 // Creates an embedded Pix charge (transparent checkout) for the PRO upgrade.
 // v2 uses a discriminated body: top-level `method` ("PIX"|"BOLETO") + `data`.
+// NOTE: AbacatePay's `customer` object requires a valid taxId (CPF). We don't
+// collect a CPF, so we only include `customer` when a taxId is actually
+// present — otherwise the API rejects the whole charge. Amount-only is valid.
 export function createPixCharge(input: {
   amount: number; // centavos
   description: string;
-  customer: { name: string; email: string; taxId?: string; cellphone?: string };
+  customer?: { name: string; email: string; taxId?: string; cellphone?: string };
   expiresIn?: number; // seconds
 }): Promise<TransparentPix> {
+  const data: Record<string, unknown> = {
+    amount: input.amount,
+    description: input.description,
+    expiresIn: input.expiresIn ?? 3600,
+  };
+  if (input.customer?.taxId) {
+    data.customer = input.customer;
+  }
   return call<TransparentPix>("/transparents/create", "POST", {
     method: "PIX",
-    data: {
-      amount: input.amount,
-      description: input.description,
-      expiresIn: input.expiresIn ?? 3600,
-      customer: input.customer,
-    },
+    data,
   });
 }
 

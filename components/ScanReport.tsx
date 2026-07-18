@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { Scan, Finding, Severity } from "@/lib/types";
 import { GradeBadge } from "./GradeBadge";
 import { Mascot, moodForScan } from "./Mascot";
+import { BlockyLoader } from "./BlockyLoader";
 import { SeverityChip } from "./SeverityChip";
 import {
   CATEGORY_LABEL,
@@ -64,9 +65,8 @@ export function ScanReport({ id, isPro }: { id: string; isPro: boolean }) {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center gap-4 py-24 text-center">
-        <span className="h-8 w-8 rounded-full border-2 border-brand/30 border-t-brand animate-ss-spin" />
-        <p className="text-sm text-muted">Carregando relatório…</p>
+      <div className="py-20">
+        <BlockyLoader label="Carregando relatório…" />
       </div>
     );
   }

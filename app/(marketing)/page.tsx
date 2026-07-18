@@ -421,7 +421,7 @@ export default function LandingPage() {
               <span className="text-4xl font-bold tracking-tight text-ink">
                 R$ 29
               </span>
-              <span className="text-sm text-faint">/mês</span>
+              <span className="text-sm text-faint">/ano</span>
             </div>
             <p className="mt-2 text-sm text-muted">
               Proteção contínua conforme você faz deploy.

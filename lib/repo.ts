@@ -316,13 +316,13 @@ export async function markPaymentPaid(id: string): Promise<void> {
   });
 }
 
-// Grant (or extend) 30 days of Pro from now.
-export async function grantProFor30Days(userId: string): Promise<void> {
+// Grant (or extend) 1 year (365 days) of Pro from now.
+export async function grantProForOneYear(userId: string): Promise<void> {
   const user = await getUser(userId);
   const base =
     user?.planUntil && new Date(user.planUntil).getTime() > Date.now()
       ? new Date(user.planUntil)
       : new Date();
-  base.setDate(base.getDate() + 30);
+  base.setDate(base.getDate() + 365);
   await setUserPlan(userId, "pro", base.toISOString());
 }

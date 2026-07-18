@@ -8,10 +8,19 @@ interface UpgradeResponse {
   brCodeBase64: string;
   demo: boolean;
   alreadyPro?: boolean;
+  freeUpgrade?: boolean;
+  amount?: number; // final price in centavos (after coupon)
+  coupon?: { code: string; label: string } | null;
   error?: string;
 }
 
 type Phase = "idle" | "loading" | "pending" | "paid" | "error";
+
+const brl = (cents: number) =>
+  (cents / 100).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
 
 const PRO_PERKS = [
   "Até 25 apps monitorados",
@@ -25,6 +34,7 @@ export default function UpgradeClient() {
   const [charge, setCharge] = useState<UpgradeResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [coupon, setCoupon] = useState("");
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const stopPolling = () => {
@@ -61,13 +71,23 @@ export default function UpgradeClient() {
     setPhase("loading");
     setError(null);
     try {
-      const res = await fetch("/api/billing/upgrade", { method: "POST" });
+      const res = await fetch("/api/billing/upgrade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ coupon: coupon.trim() || undefined }),
+      });
       const data = (await res.json()) as UpgradeResponse;
       if (res.status === 401) {
         window.location.href = "/login";
         return;
       }
-      if (data.alreadyPro) {
+      if (res.status === 400 && data.error === "invalid_coupon") {
+        setError("Cupom inválido.");
+        setPhase("idle");
+        return;
+      }
+      // alreadyPro, or a 100%-off coupon that granted Pro without Pix.
+      if (data.alreadyPro || data.freeUpgrade) {
         setPhase("paid");
         setTimeout(() => (window.location.href = "/app"), 1500);
         return;
@@ -82,7 +102,7 @@ export default function UpgradeClient() {
       setError(e instanceof Error ? e.message : "Erro inesperado");
       setPhase("error");
     }
-  }, [startPolling]);
+  }, [startPolling, coupon]);
 
   const copyCode = useCallback(async () => {
     if (!charge) return;
@@ -122,20 +142,34 @@ export default function UpgradeClient() {
             <span className="text-3xl font-semibold text-amber-400">
               R$29,00
             </span>
-            <span className="text-sm text-neutral-500">/ mês · via Pix</span>
+            <span className="text-sm text-neutral-500">/ ano · via Pix</span>
           </div>
         </section>
 
         {/* Checkout */}
         <section className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-6">
           {phase === "idle" && (
-            <div className="flex h-full flex-col justify-center text-center">
-              <p className="text-sm text-neutral-400">
+            <div className="flex h-full flex-col justify-center">
+              <p className="text-center text-sm text-neutral-400">
                 Pague com Pix e ative o Pro na hora.
               </p>
+              <label
+                htmlFor="coupon"
+                className="mt-6 block text-xs font-medium text-neutral-400"
+              >
+                Cupom de desconto (opcional)
+              </label>
+              <input
+                id="coupon"
+                value={coupon}
+                onChange={(e) => setCoupon(e.target.value.toUpperCase())}
+                placeholder="ex: BIIP"
+                className="mt-1.5 w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2.5 font-mono text-sm uppercase tracking-wider text-neutral-100 placeholder:text-neutral-600 focus:border-amber-500/50 focus:outline-none"
+              />
+              {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
               <button
                 onClick={generatePix}
-                className="mt-5 rounded-lg bg-amber-500 px-4 py-3 text-sm font-medium text-neutral-950 hover:bg-amber-400"
+                className="mt-4 rounded-lg bg-amber-500 px-4 py-3 text-sm font-medium text-neutral-950 hover:bg-amber-400"
               >
                 Gerar Pix
               </button>
@@ -182,7 +216,12 @@ export default function UpgradeClient() {
               </div>
 
               <p className="mt-4 font-mono text-sm text-neutral-200">
-                R$29,00
+                {brl(charge.amount ?? 2900)}
+                {charge.coupon && (
+                  <span className="ml-2 rounded bg-amber-500/15 px-1.5 py-0.5 text-[11px] text-amber-300">
+                    {charge.coupon.label}
+                  </span>
+                )}
               </p>
 
               {phase === "pending" && (
