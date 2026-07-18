@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthMascot } from "./AuthMascot";
 
 const inputCls =
   "w-full rounded-lg border border-border bg-surface py-2.5 px-3 text-sm text-ink placeholder:text-faint outline-none transition focus:border-brand/50 focus:ring-2 focus:ring-brand/20";
 
 export function LoginForm() {
   const router = useRouter();
+  const mascot = useAuthMascot();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
@@ -30,12 +32,14 @@ export function LoginForm() {
         return;
       }
       const data = await res.json().catch(() => ({}));
+      mascot.setError(true); // Blocky fica triste
       setError(
         data.error === "invalid_credentials"
           ? "E-mail ou senha incorretos."
           : "Não foi possível entrar. Tente novamente.",
       );
     } catch {
+      mascot.setError(true);
       setError("Erro de conexão. Tente novamente.");
     } finally {
       setBusy(false);
@@ -69,7 +73,12 @@ export function LoginForm() {
           name="password"
           required
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            mascot.setError(false); // reanima o Blocky ao corrigir
+          }}
+          onFocus={() => mascot.setTypingPassword(true)}
+          onBlur={() => mascot.setTypingPassword(false)}
           placeholder="••••••••"
           autoComplete="current-password"
           className={inputCls}

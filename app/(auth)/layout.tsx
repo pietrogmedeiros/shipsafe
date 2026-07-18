@@ -1,5 +1,5 @@
 import { Logo } from "@/components/Logo";
-import { Mascot } from "@/components/Mascot";
+import { AuthMascot, AuthMascotProvider } from "@/components/AuthMascot";
 
 export default function AuthLayout({
   children,
@@ -7,6 +7,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
+    <AuthMascotProvider>
     <div className="min-h-full lg:grid lg:grid-cols-2">
       {/* Brand panel with a living Blocky — desktop only */}
       <aside className="relative hidden overflow-hidden border-r border-border bg-surface lg:flex lg:flex-col lg:justify-between lg:p-12">
@@ -16,7 +17,7 @@ export default function AuthLayout({
           <Logo href="/" />
         </div>
         <div className="relative flex flex-col items-center gap-6">
-          <Mascot mood="happy" size={240} />
+          <AuthMascot size={240} />
           <div className="max-w-xs text-center">
             <p className="text-xl font-semibold text-ink">
               O Blocky está de olho.
@@ -41,5 +42,6 @@ export default function AuthLayout({
         </div>
       </main>
     </div>
+    </AuthMascotProvider>
   );
 }
