@@ -24,7 +24,7 @@ export default async function AppLayout({
             <span
               className={`rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${
                 pro
-                  ? "bg-emerald-500/12 text-emerald-300 ring-emerald-500/30"
+                  ? "bg-amber-500/12 text-amber-300 ring-amber-500/30"
                   : "bg-white/5 text-muted ring-white/10"
               }`}
             >

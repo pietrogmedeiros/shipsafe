@@ -1,8 +1,8 @@
-# ShipSafe — Deploy (Contabo + EasyPanel)
+# SafeShip — Deploy (Contabo + EasyPanel)
 
 ## What ships
 A single Next.js 16 standalone container (built from `Dockerfile`). Data lives
-in the **existing Elasticsearch** already running on the Contabo VM — ShipSafe
+in the **existing Elasticsearch** already running on the Contabo VM — SafeShip
 only adds its own `shipsafe-*` indices (auto-created on first boot by
 `ensureIndices()`), so it will not touch other apps' data.
 
@@ -52,4 +52,4 @@ You should see `shipsafe-users|apps|scans|findings|payments`.
 - **Continuous monitoring (Pro):** a small worker (node cron) that re-scans
   `monitor:true` apps daily and alerts on newly-appeared findings. The data
   model + scan-runner already support it; only the scheduler + notifier remain.
-- PDF report export, "Secured by ShipSafe" public badge endpoint.
+- PDF report export, "Secured by SafeShip" public badge endpoint.

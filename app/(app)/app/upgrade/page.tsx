@@ -24,14 +24,14 @@ export default async function UpgradePage() {
       : null;
     return (
       <main className="min-h-full flex items-center justify-center px-6 py-16 text-neutral-100">
-        <div className="w-full max-w-md rounded-xl border border-emerald-500/30 bg-neutral-950/80 p-8 text-center shadow-2xl">
+        <div className="w-full max-w-md rounded-xl border border-amber-500/30 bg-neutral-950/80 p-8 text-center shadow-2xl">
           <div className="text-5xl">🎉</div>
-          <h1 className="mt-4 text-2xl font-semibold text-emerald-400">
+          <h1 className="mt-4 text-2xl font-semibold text-amber-400">
             Você já é Pro
           </h1>
           <p className="mt-3 text-sm text-neutral-400">
             Monitoramento contínuo, alertas a cada deploy, PDF e o selo{" "}
-            <span className="text-emerald-400">Secured by ShipSafe</span> estão
+            <span className="text-amber-400">Secured by SafeShip</span> estão
             ativos.
           </p>
           {until && (
@@ -41,7 +41,7 @@ export default async function UpgradePage() {
           )}
           <a
             href="/app"
-            className="mt-6 inline-block rounded-lg border border-emerald-500/40 px-4 py-2 text-sm text-emerald-300 hover:bg-emerald-500/10"
+            className="mt-6 inline-block rounded-lg border border-amber-500/40 px-4 py-2 text-sm text-amber-300 hover:bg-amber-500/10"
           >
             Voltar ao painel
           </a>

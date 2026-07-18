@@ -9,7 +9,7 @@ import { PRO_PRICE_CENTS, effectivePlan } from "@/lib/plan";
 // path, so the whole upgrade UX is exercisable with no AbacatePay key.
 const DEMO_BRCODE =
   "00020126580014br.gov.bcb.pix0136demo-shipsafe-pro-00000000-0000-000052040000" +
-  "5303986540529.005802BR5910ShipSafe LP6009SAO PAULO62070503***6304DEMO";
+  "5303986540529.005802BR5910SafeShip LP6009SAO PAULO62070503***6304DEMO";
 
 // A tiny, self-contained SVG "QR" placeholder as a data URI. Not a scannable
 // code — it just fills the <img src={brCodeBase64}> slot in demo mode.
@@ -70,7 +70,7 @@ export async function POST() {
   if (isConfigured()) {
     const charge = await createPixCharge({
       amount: PRO_PRICE_CENTS,
-      description: "ShipSafe Pro — 1 mês",
+      description: "SafeShip Pro — 1 mês",
       customer: { name: user.name, email: user.email },
       expiresIn: 3600,
     });

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShipSafe — seu app vibe-coded está vazando?",
+  title: "SafeShip — seu app vibe-coded está vazando?",
   description:
     "Escaneie seu app publicado como um atacante faria: segredos expostos, Supabase sem RLS, .env e .git vazados, headers ausentes. Relatório com nota A–F e correções em português.",
 };

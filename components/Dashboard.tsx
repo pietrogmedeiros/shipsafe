@@ -274,7 +274,7 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
       )}
 
       {!isPro && !loading && apps.length > 0 && (
-        <div className="rounded-xl border border-border bg-gradient-to-r from-emerald-500/[0.06] to-transparent p-4 text-sm text-muted">
+        <div className="rounded-xl border border-border bg-gradient-to-r from-amber-500/[0.06] to-transparent p-4 text-sm text-muted">
           Você está no plano gratuito.{" "}
           <Link
             href="/app/upgrade"

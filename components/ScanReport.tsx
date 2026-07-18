@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Scan, Finding, Severity } from "@/lib/types";
 import { GradeBadge } from "./GradeBadge";
+import { Mascot, moodForScan } from "./Mascot";
 import { SeverityChip } from "./SeverityChip";
 import {
   CATEGORY_LABEL,
@@ -103,7 +104,7 @@ export function ScanReport({ id, isPro }: { id: string; isPro: boolean }) {
             ? "border-red-500/30"
             : failed
               ? "border-border"
-              : "border-emerald-500/20"
+              : "border-amber-500/20"
         }`}
       >
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
@@ -138,6 +139,10 @@ export function ScanReport({ id, isPro }: { id: string; isPro: boolean }) {
           <div className="sm:ml-auto">
             {!running && !failed && (
               <div className="flex flex-col items-start gap-3 sm:items-end">
+                <Mascot
+                  mood={moodForScan(scan.grade, criticalCount)}
+                  size={96}
+                />
                 <div className="flex items-baseline gap-1">
                   <span className="text-3xl font-bold tracking-tight text-ink">
                     {scan.score ?? "—"}
@@ -167,12 +172,14 @@ export function ScanReport({ id, isPro }: { id: string; isPro: boolean }) {
       {!running && !failed && (
         <>
           {findings.length === 0 ? (
-            <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/[0.06] px-6 py-12 text-center">
-              <div className="text-4xl">✅</div>
-              <p className="mt-3 text-lg font-semibold text-emerald-200">
+            <div className="rounded-2xl border border-amber-500/25 bg-amber-500/[0.06] px-6 py-12 text-center">
+              <div className="mx-auto flex justify-center">
+                <Mascot mood="happy" size={120} />
+              </div>
+              <p className="mt-3 text-lg font-semibold text-amber-200">
                 Nenhum vazamento crítico encontrado
               </p>
-              <p className="mx-auto mt-1 max-w-md text-sm text-emerald-200/70">
+              <p className="mx-auto mt-1 max-w-md text-sm text-amber-200/70">
                 Seu app passou nas nossas verificações externas. Ative o
                 monitoramento contínuo para ser avisado se algo mudar num
                 próximo deploy.
@@ -207,7 +214,7 @@ export function ScanReport({ id, isPro }: { id: string; isPro: boolean }) {
           <div className="flex flex-col items-center gap-4 border-t border-border pt-8 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-brand" />
-              Secured by ShipSafe
+              Secured by SafeShip
             </div>
             {!isPro && (
               <p className="text-sm text-muted">
@@ -280,7 +287,7 @@ function FindingCard({ finding }: { finding: Finding }) {
           <p className="mb-1 text-[11px] font-medium uppercase tracking-wide text-faint">
             Evidência
           </p>
-          <pre className="overflow-x-auto rounded-lg border border-border-soft bg-bg px-3 py-2.5 font-mono text-xs leading-relaxed text-emerald-200/90">
+          <pre className="overflow-x-auto rounded-lg border border-border-soft bg-bg px-3 py-2.5 font-mono text-xs leading-relaxed text-amber-200/90">
             {finding.evidence}
           </pre>
         </div>
@@ -297,7 +304,7 @@ function FindingCard({ finding }: { finding: Finding }) {
           <p className="mb-1 text-[11px] font-medium uppercase tracking-wide text-brand-soft">
             Como corrigir
           </p>
-          <p className="whitespace-pre-line text-sm leading-relaxed text-emerald-100/80">
+          <p className="whitespace-pre-line text-sm leading-relaxed text-amber-100/80">
             {finding.remediation}
           </p>
         </div>

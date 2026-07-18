@@ -87,7 +87,7 @@ export function SignupForm({ presetUrl }: { presetUrl?: string }) {
       {presetUrl && (
         <div className="rounded-lg border border-brand/25 bg-brand/8 px-3 py-2 text-xs text-brand-soft">
           Vamos escanear{" "}
-          <span className="font-mono break-all text-emerald-200">
+          <span className="font-mono break-all text-amber-200">
             {presetUrl}
           </span>{" "}
           assim que sua conta estiver pronta.

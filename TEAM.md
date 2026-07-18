@@ -1,4 +1,4 @@
-# ShipSafe — Team Contract (READ FIRST)
+# SafeShip — Team Contract (READ FIRST)
 
 **Product:** Security scanner + continuous monitor for vibe-coded apps.
 User pastes their deployed app URL → we hit it from the outside like an

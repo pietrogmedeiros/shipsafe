@@ -8,7 +8,7 @@ export default function LoginPage() {
         Entrar
       </h1>
       <p className="mt-1 mb-5 text-sm text-muted">
-        Acesse seu painel do ShipSafe.
+        Acesse seu painel do SafeShip.
       </p>
       <LoginForm />
       <p className="mt-5 text-center text-sm text-muted">

@@ -1,7 +1,7 @@
-# ShipSafe 🛡️
+# SafeShip 🛡️
 
 **Scanner de segurança para apps vibe-coded.** Cole a URL do seu app deployado
-e o ShipSafe bate nele por fora, como um atacante, para achar antes dos hackers:
+e o SafeShip bate nele por fora, como um atacante, para achar antes dos hackers:
 
 - 🔑 **Segredos expostos** no bundle do client (Supabase, Firebase, OpenAI,
   Anthropic, Stripe live, AWS, GitHub, chaves privadas…)
@@ -17,7 +17,7 @@ Nota final **A–F**.
 ## Planos
 - **Grátis:** 1 app, scan sob demanda, relatório completo.
 - **Pro (R$ 29/mês):** até 25 apps, monitoramento contínuo + alerta a cada
-  deploy, PDF e selo "Secured by ShipSafe". Pagamento via **Pix (AbacatePay)**.
+  deploy, PDF e selo "Secured by SafeShip". Pagamento via **Pix (AbacatePay)**.
 
 ## Stack
 - **Next.js 16** (App Router, TS, Tailwind v4) — web + API

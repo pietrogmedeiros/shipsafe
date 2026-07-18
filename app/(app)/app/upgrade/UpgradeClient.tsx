@@ -17,7 +17,7 @@ const PRO_PERKS = [
   "Até 25 apps monitorados",
   "Monitoramento contínuo + alerta a cada deploy",
   "Relatório em PDF",
-  'Selo "Secured by ShipSafe"',
+  'Selo "Secured by SafeShip"',
 ];
 
 export default function UpgradeClient() {
@@ -100,8 +100,8 @@ export default function UpgradeClient() {
       <div className="mx-auto grid w-full max-w-4xl gap-10 md:grid-cols-2">
         {/* Pitch */}
         <section>
-          <p className="font-mono text-xs uppercase tracking-widest text-emerald-500">
-            ShipSafe Pro
+          <p className="font-mono text-xs uppercase tracking-widest text-amber-500">
+            SafeShip Pro
           </p>
           <h1 className="mt-2 text-3xl font-semibold">
             Segurança contínua, não só um scan.
@@ -113,13 +113,13 @@ export default function UpgradeClient() {
           <ul className="mt-6 space-y-3">
             {PRO_PERKS.map((perk) => (
               <li key={perk} className="flex items-start gap-3 text-sm">
-                <span className="mt-0.5 text-emerald-400">✓</span>
+                <span className="mt-0.5 text-amber-400">✓</span>
                 <span className="text-neutral-200">{perk}</span>
               </li>
             ))}
           </ul>
           <div className="mt-8 flex items-baseline gap-2">
-            <span className="text-3xl font-semibold text-emerald-400">
+            <span className="text-3xl font-semibold text-amber-400">
               R$29,00
             </span>
             <span className="text-sm text-neutral-500">/ mês · via Pix</span>
@@ -135,7 +135,7 @@ export default function UpgradeClient() {
               </p>
               <button
                 onClick={generatePix}
-                className="mt-5 rounded-lg bg-emerald-500 px-4 py-3 text-sm font-medium text-neutral-950 hover:bg-emerald-400"
+                className="mt-5 rounded-lg bg-amber-500 px-4 py-3 text-sm font-medium text-neutral-950 hover:bg-amber-400"
               >
                 Gerar Pix
               </button>
@@ -175,7 +175,7 @@ export default function UpgradeClient() {
                 </code>
                 <button
                   onClick={copyCode}
-                  className="shrink-0 rounded-md border border-emerald-500/40 px-3 text-xs text-emerald-300 hover:bg-emerald-500/10"
+                  className="shrink-0 rounded-md border border-amber-500/40 px-3 text-xs text-amber-300 hover:bg-amber-500/10"
                 >
                   {copied ? "Copiado" : "Copiar"}
                 </button>
@@ -192,7 +192,7 @@ export default function UpgradeClient() {
                 </p>
               )}
               {phase === "paid" && (
-                <p className="mt-4 text-sm font-medium text-emerald-400">
+                <p className="mt-4 text-sm font-medium text-amber-400">
                   Pagamento confirmado — você é Pro! Redirecionando…
                 </p>
               )}

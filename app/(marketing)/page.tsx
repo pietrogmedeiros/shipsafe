@@ -198,7 +198,7 @@ export default function LandingPage() {
           </div>
 
           {/* Pro */}
-          <div className="relative flex flex-col rounded-2xl border border-brand/40 bg-surface p-6 shadow-[0_0_60px_-24px_rgba(16,185,129,0.5)]">
+          <div className="relative flex flex-col rounded-2xl border border-brand/40 bg-surface p-6 shadow-[0_0_60px_-24px_rgba(245,197,24,0.5)]">
             <span className="absolute -top-2.5 right-5 rounded-full bg-brand px-2.5 py-0.5 text-xs font-semibold text-black">
               Recomendado
             </span>
@@ -215,7 +215,7 @@ export default function LandingPage() {
               <Feature pro>Monitoramento contínuo</Feature>
               <Feature pro>Alerta a cada novo deploy</Feature>
               <Feature pro>Exportar relatório em PDF</Feature>
-              <Feature pro>Selo “Secured by ShipSafe”</Feature>
+              <Feature pro>Selo “Secured by SafeShip”</Feature>
             </ul>
             <Link
               href="/signup"
@@ -248,7 +248,7 @@ export default function LandingPage() {
       <footer className="border-t border-border">
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-faint sm:flex-row sm:px-6">
           <Logo href="/" />
-          <p>© {new Date().getFullYear()} ShipSafe. Feito para quem shipa rápido.</p>
+          <p>© {new Date().getFullYear()} SafeShip. Feito para quem shipa rápido.</p>
         </div>
       </footer>
     </div>

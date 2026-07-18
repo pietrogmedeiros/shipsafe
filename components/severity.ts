@@ -53,16 +53,16 @@ export const GRADE_STYLE: Record<
   { text: string; ring: string; bg: string; glow: string }
 > = {
   A: {
-    text: "text-emerald-300",
-    ring: "ring-emerald-500/40",
-    bg: "bg-emerald-500/10",
-    glow: "shadow-[0_0_40px_-8px_rgba(16,185,129,0.5)]",
+    text: "text-yellow-200",
+    ring: "ring-yellow-300/45",
+    bg: "bg-yellow-300/10",
+    glow: "shadow-[0_0_40px_-8px_rgba(253,224,71,0.55)]",
   },
   B: {
-    text: "text-emerald-300",
-    ring: "ring-emerald-500/30",
-    bg: "bg-emerald-500/8",
-    glow: "shadow-[0_0_32px_-10px_rgba(16,185,129,0.4)]",
+    text: "text-yellow-400",
+    ring: "ring-yellow-500/35",
+    bg: "bg-yellow-500/10",
+    glow: "shadow-[0_0_32px_-10px_rgba(234,179,8,0.4)]",
   },
   C: {
     text: "text-amber-300",
