@@ -17,8 +17,9 @@ export default async function AppLayout({
   const pro = effectivePlan(session) === "pro";
 
   return (
-    <div className="flex min-h-full flex-col">
-      <header className="sticky top-0 z-20 border-b border-border bg-bg/80 backdrop-blur">
+    <div className="relative flex min-h-full flex-col">
+      <div className="app-backdrop" aria-hidden="true" />
+      <header className="sticky top-0 z-20 border-b border-border bg-bg/70 backdrop-blur-md">
         <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
           <Logo href="/app" />
           <div className="flex items-center gap-3">
@@ -48,7 +49,7 @@ export default async function AppLayout({
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
+      <main className="relative z-10 mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
         {children}
       </main>
     </div>

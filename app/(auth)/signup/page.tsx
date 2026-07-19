@@ -12,7 +12,7 @@ export default async function SignupPage({
   const presetUrl = raw?.trim() || undefined;
 
   return (
-    <div className="rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur">
+    <div className="panel rounded-2xl p-6 backdrop-blur">
       <h1 className="text-lg font-semibold tracking-tight text-ink">
         Criar conta
       </h1>

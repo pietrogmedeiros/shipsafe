@@ -173,7 +173,7 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
           <button
             type="submit"
             disabled={submitting}
-            className="shrink-0 rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-brand-soft disabled:opacity-60"
+            className="btn-glow shrink-0 rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-black hover:bg-brand-soft disabled:opacity-60 disabled:shadow-none"
           >
             {submitting ? "Escaneando…" : "Escanear"}
           </button>
@@ -214,7 +214,7 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
             {apps.map((app) => (
               <div
                 key={app.id}
-                className="flex flex-col justify-between rounded-xl border border-border bg-surface p-4"
+                className="panel flex flex-col justify-between rounded-xl p-4 transition-colors hover:border-brand/25"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -266,7 +266,7 @@ export function Dashboard({ isPro }: { isPro: boolean }) {
       {!loading && scans.length > 0 && (
         <section>
           <h2 className="text-sm font-medium text-muted">Scans recentes</h2>
-          <div className="mt-3 divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface">
+          <div className="panel mt-3 divide-y divide-border overflow-hidden rounded-xl">
             {scans.slice(0, 12).map((scan) => {
               const app = apps.find((a) => a.id === scan.appId);
               return (

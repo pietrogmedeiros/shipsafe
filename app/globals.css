@@ -50,6 +50,158 @@ body {
   mask-image: radial-gradient(70% 60% at 50% 0%, black, transparent 80%);
 }
 
+/* Atmospheric "dark dawn sky" — a visible warm bloom on the horizon, cool cloud
+   drifts to the sides, and a cool high-sky wash. The FormPlume sky translated to
+   the console theme (dark-native, but clearly present). */
+.aurora {
+  background:
+    /* cool night-sky band — sits in the hero body, below the nav bar */
+    linear-gradient(180deg, rgba(26, 36, 60, 0.85) 0%, rgba(16, 22, 38, 0.45) 26%, rgba(8, 9, 11, 0) 54%),
+    /* wide warm dawn bloom, centred low enough to read under the nav */
+    radial-gradient(80% 62% at 50% 6%, rgba(245, 197, 24, 0.2), transparent 60%),
+    /* warm sun core, slightly off-centre */
+    radial-gradient(52% 44% at 60% 0%, rgba(250, 194, 84, 0.18), transparent 55%),
+    /* cool cloud drifting in from the left */
+    radial-gradient(46% 42% at 14% 16%, rgba(118, 148, 228, 0.14), transparent 62%),
+    /* warm cloud drifting in from the right */
+    radial-gradient(46% 42% at 88% 12%, rgba(245, 197, 24, 0.12), transparent 62%);
+}
+
+/* Fine film grain for tactile depth — self-contained, no external asset. */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+}
+
+/* Premium surface — soft top-light, inner hairline, depth shadow, and a
+   brand hairline that ignites on hover. Replaces flat border+bg cards. */
+.surface-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.024), rgba(255, 255, 255, 0) 42%),
+    var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.03),
+    0 20px 44px -30px rgba(0, 0, 0, 0.8);
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.65, 0.2, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+.surface-card::before {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 197, 24, 0.5),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.surface-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245, 197, 24, 0.28);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+    0 30px 56px -28px rgba(0, 0, 0, 0.85);
+}
+.surface-card:hover::before {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .surface-card,
+  .surface-card:hover {
+    transform: none;
+  }
+}
+
+/* Static premium surface — same material as .surface-card (soft top-light,
+   depth shadow, faint brand hairline) but WITHOUT the hover lift. For work
+   surfaces: form panels, dashboard cards. */
+.panel {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0) 40%),
+    var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.03),
+    0 16px 40px -32px rgba(0, 0, 0, 0.7);
+}
+.panel::before {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 197, 24, 0.22),
+    transparent
+  );
+}
+
+/* Fixed backdrop for internal screens — static (does not scroll), no sky.
+   A calm console field: dark base, subtle corner glows, a faint fixed grid. */
+.app-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(48% 38% at 100% 0%, rgba(245, 197, 24, 0.05), transparent 62%),
+    radial-gradient(55% 45% at 0% 100%, rgba(112, 132, 196, 0.035), transparent 64%),
+    var(--color-bg);
+}
+.app-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(90% 80% at 50% 0%, black, transparent 85%);
+  mask-image: radial-gradient(90% 80% at 50% 0%, black, transparent 85%);
+}
+
+/* Brand button — grounded glow + subtle lift on hover. */
+.btn-glow {
+  box-shadow:
+    0 10px 30px -12px rgba(245, 197, 24, 0.55),
+    0 2px 8px -3px rgba(245, 197, 24, 0.4);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.3s ease,
+    background-color 0.2s ease;
+}
+.btn-glow:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 16px 40px -12px rgba(245, 197, 24, 0.65),
+    0 3px 10px -3px rgba(245, 197, 24, 0.5);
+}
+.btn-glow:active {
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-glow,
+  .btn-glow:hover {
+    transform: none;
+  }
+}
+
 ::selection {
   background: rgba(245, 197, 24, 0.28);
 }

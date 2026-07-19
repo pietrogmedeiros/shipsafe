@@ -37,7 +37,7 @@ export function HeroUrlForm() {
       </div>
       <button
         type="submit"
-        className="shrink-0 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-black transition hover:bg-brand-soft focus:outline-none focus:ring-2 focus:ring-brand/40"
+        className="btn-glow shrink-0 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-black hover:bg-brand-soft focus:outline-none focus:ring-2 focus:ring-brand/40"
       >
         Escanear grátis
       </button>

@@ -3,21 +3,7 @@ import { Logo, ShieldMark } from "@/components/Logo";
 import { HeroUrlForm } from "@/components/HeroUrlForm";
 import { Mascot } from "@/components/Mascot";
 import { LandingScanConsole } from "@/components/LandingScanConsole";
-
-const STATS = [
-  {
-    value: "11%",
-    label: "dos apps vibe-coded vazam credenciais do Supabase",
-  },
-  {
-    value: "380 mil",
-    label: "apps encontrados vazando dados de usuários",
-  },
-  {
-    value: "1,5 mi",
-    label: "de chaves expostas em um único caso: o Moltbook",
-  },
-];
+import { StatsPaintReveal } from "@/components/StatsPaintReveal";
 
 const STEPS = [
   {
@@ -122,7 +108,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/signup"
-              className="rounded-md bg-brand px-3.5 py-1.5 text-sm font-semibold text-black transition hover:bg-brand-soft"
+              className="btn-glow rounded-md bg-brand px-3.5 py-1.5 text-sm font-semibold text-black hover:bg-brand-soft"
             >
               Criar conta
             </Link>
@@ -132,8 +118,9 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border">
-        <div className="hero-glow pointer-events-none absolute inset-0" />
+        <div className="aurora pointer-events-none absolute inset-0" />
         <div className="grid-lines pointer-events-none absolute inset-0" />
+        <div className="grain pointer-events-none absolute inset-0" />
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 px-4 pb-20 pt-16 sm:px-6 sm:pt-24 lg:grid-cols-[1.05fr_.95fr] lg:gap-10 lg:pb-28">
           {/* copy */}
           <div className="max-w-xl">
@@ -197,18 +184,7 @@ export default function LandingPage() {
             </span>
             <div className="h-px flex-1 bg-border" />
           </div>
-          <div className="mt-8 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3">
-            {STATS.map((s) => (
-              <div key={s.value} className="bg-surface px-6 py-8">
-                <div className="text-4xl font-bold tracking-tight text-brand-soft sm:text-5xl">
-                  {s.value}
-                </div>
-                <p className="mt-3 max-w-[18rem] text-sm leading-relaxed text-muted">
-                  {s.label}
-                </p>
-              </div>
-            ))}
-          </div>
+          <StatsPaintReveal />
           <p className="mt-4 text-xs text-faint">
             Dados de incidentes reais de apps vibe-coded em 2026. Não é FUD — é o
             que já está indexado e exposto agora.
@@ -219,9 +195,7 @@ export default function LandingPage() {
       {/* Conheça o Blocky */}
       <section className="relative mx-auto w-full max-w-6xl px-4 py-24 sm:px-6">
         <div className="max-w-2xl">
-          <p className="font-mono text-[11px] uppercase tracking-wide text-brand-soft">
-            O mascote
-          </p>
+          <Eyebrow>O mascote</Eyebrow>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Conheça o Blocky
           </h2>
@@ -237,7 +211,7 @@ export default function LandingPage() {
           {BLOCKY.map((b) => (
             <div
               key={b.mood}
-              className="flex flex-col items-center rounded-2xl border border-border bg-surface px-6 py-8 text-center"
+              className="surface-card flex flex-col items-center rounded-2xl px-6 py-8 text-center"
             >
               <div className="grid h-40 place-items-center">
                 <Mascot mood={b.mood} size={132} />
@@ -260,9 +234,7 @@ export default function LandingPage() {
       <section className="relative border-y border-border bg-bg-elev">
         <div className="mx-auto w-full max-w-6xl px-4 py-24 sm:px-6">
           <div className="max-w-2xl">
-            <p className="font-mono text-[11px] uppercase tracking-wide text-brand-soft">
-              Como funciona
-            </p>
+            <Eyebrow>Como funciona</Eyebrow>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
               Do deploy à nota em três passos
             </h2>
@@ -276,7 +248,7 @@ export default function LandingPage() {
             {STEPS.map((step, i) => (
               <li
                 key={step.n}
-                className="relative flex flex-col rounded-2xl border border-border bg-surface p-6"
+                className="surface-card relative flex flex-col rounded-2xl p-6"
               >
                 <div className="flex items-center gap-3">
                   <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-brand/30 bg-brand/10 font-mono text-sm font-bold text-brand-soft">
@@ -305,9 +277,7 @@ export default function LandingPage() {
       <section className="relative mx-auto w-full max-w-6xl px-4 py-24 sm:px-6">
         <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr]">
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <p className="font-mono text-[11px] uppercase tracking-wide text-brand-soft">
-              A superfície de ataque
-            </p>
+            <Eyebrow>A superfície de ataque</Eyebrow>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
               O que verificamos
             </h2>
@@ -321,7 +291,7 @@ export default function LandingPage() {
             {CHECKS.map((c) => (
               <li
                 key={c.title}
-                className="rounded-xl border border-border bg-surface p-5 transition hover:border-brand/30"
+                className="surface-card rounded-xl p-5"
               >
                 <div className="flex items-start gap-3">
                   <ShieldMark className="mt-0.5 h-5 w-5 shrink-0" />
@@ -342,11 +312,10 @@ export default function LandingPage() {
 
       {/* Como nasceu o SafeShip — editorial */}
       <section className="relative overflow-hidden border-y border-border bg-bg-elev">
-        <div className="hero-glow pointer-events-none absolute inset-0 opacity-60" />
+        <div className="aurora pointer-events-none absolute inset-0 opacity-70" />
+        <div className="grain pointer-events-none absolute inset-0" />
         <div className="relative mx-auto w-full max-w-3xl px-4 py-24 sm:px-6">
-          <p className="font-mono text-[11px] uppercase tracking-wide text-brand-soft">
-            A origem
-          </p>
+          <Eyebrow>A origem</Eyebrow>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Como nasceu o SafeShip
           </h2>
@@ -390,9 +359,7 @@ export default function LandingPage() {
       {/* Pricing */}
       <section className="relative mx-auto w-full max-w-5xl px-4 py-24 sm:px-6">
         <div className="max-w-2xl">
-          <p className="font-mono text-[11px] uppercase tracking-wide text-brand-soft">
-            Planos
-          </p>
+          <Eyebrow>Planos</Eyebrow>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Preço honesto
           </h2>
@@ -404,7 +371,7 @@ export default function LandingPage() {
 
         <div className="mt-12 grid items-start gap-5 md:grid-cols-2">
           {/* Free */}
-          <div className="flex flex-col rounded-2xl border border-border bg-surface p-7">
+          <div className="surface-card flex flex-col rounded-2xl p-7">
             <h3 className="text-sm font-medium text-muted">Free</h3>
             <div className="mt-3 flex items-baseline gap-1.5">
               <span className="text-4xl font-bold tracking-tight text-ink">
@@ -451,7 +418,7 @@ export default function LandingPage() {
             </ul>
             <Link
               href="/signup"
-              className="mt-7 rounded-lg bg-brand py-2.5 text-center text-sm font-semibold text-black transition hover:bg-brand-soft"
+              className="btn-glow mt-7 rounded-lg bg-brand py-2.5 text-center text-sm font-semibold text-black hover:bg-brand-soft"
             >
               Assinar o Pro
             </Link>
@@ -461,8 +428,9 @@ export default function LandingPage() {
 
       {/* Final CTA */}
       <section className="relative overflow-hidden border-t border-border bg-bg-elev">
-        <div className="hero-glow pointer-events-none absolute inset-0" />
+        <div className="aurora pointer-events-none absolute inset-0" />
         <div className="grid-lines pointer-events-none absolute inset-0" />
+        <div className="grain pointer-events-none absolute inset-0" />
         <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center px-4 py-24 text-center sm:px-6">
           <div className="mb-2">
             <Mascot mood="happy" size={96} />
@@ -501,6 +469,15 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-brand-soft">
+      <span className="h-px w-7 bg-gradient-to-r from-brand to-transparent" />
+      {children}
+    </span>
   );
 }
 
