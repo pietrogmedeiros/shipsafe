@@ -1,8 +1,12 @@
 // Low-level HTTP helpers for the scanner.
 // We fetch hostile / arbitrary remote URLs here, so EVERYTHING is bounded:
-// hard timeouts (AbortController), a response size cap, and we never throw.
+// hard timeouts (AbortController), a response size cap, an SSRF guard on the
+// target (and on every redirect hop), and we never throw.
+
+import { assertPublicUrl } from "./ssrf";
 
 const DEFAULT_TIMEOUT_MS = 8_000;
+const MAX_REDIRECTS = 5;
 const DEFAULT_MAX_BYTES = 2_500_000; // ~2.5MB cap per response
 const USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
@@ -57,12 +61,37 @@ export async function safeFetch(
   });
 
   try {
-    const res = await fetch(url, {
-      method,
-      headers: { "User-Agent": USER_AGENT, ...headers },
-      signal: controller.signal,
-      redirect: "follow",
-    });
+    // Manual redirect handling so we can re-validate every hop against the
+    // SSRF guard — otherwise a public host could 3xx us to an internal target.
+    let currentUrl = url;
+    let res: Response;
+    let hops = 0;
+    while (true) {
+      await assertPublicUrl(currentUrl);
+      res = await fetch(currentUrl, {
+        method,
+        headers: { "User-Agent": USER_AGENT, ...headers },
+        signal: controller.signal,
+        redirect: "manual",
+      });
+      const isRedirect = res.status >= 300 && res.status < 400;
+      const location = res.headers.get("location");
+      if (!isRedirect || !location) break;
+      if (++hops > MAX_REDIRECTS) {
+        return empty(`too many redirects (>${MAX_REDIRECTS})`);
+      }
+      // Drain the redirect body so the connection is released.
+      try {
+        await res.body?.cancel();
+      } catch {
+        /* ignore */
+      }
+      try {
+        currentUrl = new URL(location, currentUrl).toString();
+      } catch {
+        return empty(`invalid redirect location: ${location}`);
+      }
+    }
 
     const resHeaders: Record<string, string> = {};
     res.headers.forEach((value, key) => {
@@ -122,7 +151,7 @@ export async function safeFetch(
       headers: resHeaders,
       text,
       truncated,
-      url: res.url || url,
+      url: res.url || currentUrl,
       error: null,
     };
   } catch (err) {

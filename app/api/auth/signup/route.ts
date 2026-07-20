@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createUser } from "@/lib/repo";
 import { createSession } from "@/lib/auth";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
+import { isDisposableEmail } from "@/lib/email";
 
 const schema = z.object({
   name: z.string().min(1).max(80),
@@ -9,7 +11,24 @@ const schema = z.object({
   password: z.string().min(8).max(200),
 });
 
+// Per-IP signup cap: 5 accounts per hour from one address. Bots that flood
+// the endpoint get 429'd; a real person creating an account never hits it.
+const SIGNUP_LIMIT = 5;
+const SIGNUP_WINDOW_MS = 60 * 60 * 1000;
+
 export async function POST(req: Request) {
+  const ip = clientIp(req);
+  const rl = rateLimit(`signup:${ip}`, SIGNUP_LIMIT, SIGNUP_WINDOW_MS);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: "rate_limited" },
+      {
+        status: 429,
+        headers: { "Retry-After": String(Math.ceil(rl.retryAfterMs / 1000)) },
+      },
+    );
+  }
+
   let body: unknown;
   try {
     body = await req.json();
@@ -23,6 +42,10 @@ export async function POST(req: Request) {
       { error: "validation", issues: parsed.error.flatten() },
       { status: 400 },
     );
+  }
+
+  if (isDisposableEmail(parsed.data.email)) {
+    return NextResponse.json({ error: "email_not_allowed" }, { status: 400 });
   }
 
   try {

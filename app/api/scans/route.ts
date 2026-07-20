@@ -11,6 +11,12 @@ import {
 } from "@/lib/repo";
 import { runScan } from "@/lib/scan-runner";
 import { limitsFor } from "@/lib/plan";
+import { rateLimit } from "@/lib/rate-limit";
+
+// Cap scans per user per hour. Stops a logged-in account (incl. a bot signup)
+// from using the scanner engine as a high-volume probing proxy.
+const SCAN_LIMIT = 20;
+const SCAN_WINDOW_MS = 60 * 60 * 1000;
 
 const schema = z
   .object({
@@ -35,6 +41,17 @@ function normalizeUrl(raw: string): string | null {
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+
+  const rl = rateLimit(`scan:${session.id}`, SCAN_LIMIT, SCAN_WINDOW_MS);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: "rate_limited" },
+      {
+        status: 429,
+        headers: { "Retry-After": String(Math.ceil(rl.retryAfterMs / 1000)) },
+      },
+    );
+  }
 
   let body: unknown;
   try {

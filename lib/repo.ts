@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import { es } from "./es";
 import { IDX, ensureIndices } from "./indices";
 import { hashPassword } from "./auth";
+import { canonicalizeEmail } from "./email";
 import type {
   App,
   Feedback,
@@ -27,10 +28,16 @@ const now = () => new Date().toISOString();
 // ---------- Users ----------
 export async function findUserByEmail(email: string): Promise<User | null> {
   await ready();
+  // Match either the canonical form (new accounts store this) or the raw
+  // lowercased form (legacy accounts stored before canonicalization). This
+  // keeps existing users able to log in while new signups dedupe by identity.
+  const raw = email.toLowerCase().trim();
+  const canonical = canonicalizeEmail(email);
+  const terms = canonical === raw ? [raw] : [canonical, raw];
   const res = await es.search<User>({
     index: IDX.users,
     size: 1,
-    query: { term: { email: email.toLowerCase() } },
+    query: { terms: { email: terms } },
   });
   return res.hits.hits[0]?._source ?? null;
 }
@@ -51,7 +58,9 @@ export async function createUser(input: {
   password: string;
 }): Promise<User> {
   await ready();
-  const email = input.email.toLowerCase().trim();
+  // Store the canonical identity so Gmail dot/+tag aliases can't create
+  // multiple accounts for the same inbox.
+  const email = canonicalizeEmail(input.email);
   if (await findUserByEmail(email)) {
     throw new Error("EMAIL_TAKEN");
   }
